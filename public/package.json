@@ -2,10 +2,10 @@
   "name": "streamly-server",
   "version": "1.0.0",
   "description": "Gelişmiş müzik uygulaması backend server",
-  "main": "server.js",
+  "main": "public/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node public/server.js",
+    "dev": "nodemon public/server.js"
   },
   "author": "SeninAdin",
   "license": "MIT",
