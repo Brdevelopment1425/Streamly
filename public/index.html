@@ -3,782 +3,851 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Müzik Uygulaması - Tam Özellikli</title>
+<title>Süper Modern Müzik Uygulaması</title>
 
-<!-- FontAwesome ikonlar -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 <style>
-  /* ======= Genel ======= */
+  /* ==== TEMEL SIFIRLAMA VE FONT ==== */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
   * {
     margin: 0; padding: 0; box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     user-select: none;
   }
   body {
-    background: linear-gradient(135deg, #121212 0%, #1db954 100%);
-    color: #fff;
     min-height: 100vh;
-    display: flex; flex-direction: column;
-    font-size: 16px;
+    background: linear-gradient(120deg, #0d0d0d, #121212, #0d0d0d);
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
+    color: #e0f7da;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+  a {
+    color: #00ff99;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  a:hover {
+    color: #00ffaa;
+    text-decoration: underline;
   }
 
-  /* Menü */
-  .menu {
+  /* ==== NEON IŞIKLI MENÜ ==== */
+  nav.menu {
+    position: fixed;
+    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: #181818;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    padding: 0.75rem 0;
-    position: fixed;
-    width: 100%;
-    z-index: 9999;
-    transition: background-color 0.3s ease;
+    background: rgba(4, 4, 4, 0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 0 0 40px 40px;
+    padding: 1.3rem 0;
+    box-shadow:
+      inset 0 0 20px #00ff99cc,
+      0 0 30px #00ff99aa;
+    z-index: 10000;
+    transition: background-color 0.6s ease;
+    user-select: none;
   }
-  .menu.top {
+  nav.menu.top {
     top: 0;
-    border-bottom: 1px solid #282828;
   }
-  .menu.bottom {
+  nav.menu.bottom {
     bottom: 0;
-    border-top: 1px solid #282828;
+    border-radius: 40px 40px 0 0;
   }
-
-  .menu button {
-    background: none;
+  nav.menu button {
+    background: transparent;
     border: none;
-    color: #b3b3b3;
-    font-size: 1.9rem;
     cursor: pointer;
-    padding: 8px 14px;
-    border-radius: 14px;
-    position: relative;
+    font-size: 2.5rem;
+    color: #00ff99;
+    filter: drop-shadow(0 0 10px #00ff99);
     transition:
-      color 0.3s ease,
-      background-color 0.3s ease,
-      transform 0.25s ease;
+      color 0.4s ease,
+      transform 0.35s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    position: relative;
   }
-  .menu button[title]:hover::after {
+  nav.menu button::after {
     content: attr(title);
     position: absolute;
-    bottom: 120%;
+    bottom: 130%;
     left: 50%;
-    transform: translateX(-50%);
-    background: #1db954;
-    color: #121212;
-    padding: 5px 10px;
-    border-radius: 6px;
+    transform: translateX(-50%) translateY(10px);
+    color: #00ff99cc;
+    font-weight: 700;
     font-size: 0.85rem;
     white-space: nowrap;
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    letter-spacing: 0.9px;
+    user-select: none;
+    text-shadow:
+      0 0 3px #00ff99,
+      0 0 10px #00ff99;
+  }
+  nav.menu button:hover::after {
     opacity: 1;
-    transition: opacity 0.2s ease;
-    z-index: 10000;
+    transform: translateX(-50%) translateY(0);
   }
-  .menu button:hover {
-    color: #1db954;
-    background-color: rgba(29,185,84,0.15);
-    transform: scale(1.15);
-    box-shadow: 0 0 8px #1db954;
+  nav.menu button:hover {
+    color: #00ffaa;
+    transform: scale(1.35) rotate(-8deg);
+    filter:
+      drop-shadow(0 0 15px #00ffaa)
+      drop-shadow(0 0 30px #00ffaa);
+    text-shadow:
+      0 0 15px #00ffaa,
+      0 0 35px #00ffaa;
   }
-  .menu button.active {
-    color: #1db954;
-    background-color: rgba(29,185,84,0.25);
-    box-shadow: 0 0 12px #1db954;
-    transform: scale(1.2);
+  nav.menu button.active {
+    color: #00ffa2;
+    filter:
+      drop-shadow(0 0 18px #00ffa2)
+      drop-shadow(0 0 40px #00ffa2);
+    text-shadow:
+      0 0 25px #00ffa2,
+      0 0 50px #00ffa2;
+    animation: activePulse 2.6s ease-in-out infinite alternate;
+    transform: scale(1.5) rotate(-6deg);
+  }
+  @keyframes activePulse {
+    0%, 100% {
+      filter:
+        drop-shadow(0 0 18px #00ffa2)
+        drop-shadow(0 0 40px #00ffa2);
+      text-shadow:
+        0 0 25px #00ffa2,
+        0 0 50px #00ffa2;
+    }
+    50% {
+      filter:
+        drop-shadow(0 0 25px #00ffce)
+        drop-shadow(0 0 60px #00ffce);
+      text-shadow:
+        0 0 40px #00ffce,
+        0 0 70px #00ffce;
+    }
   }
 
+  /* ==== ANA İÇERİK ALANI ==== */
   main {
-    padding: 5rem 2rem 5rem;
+    margin: 6rem auto 6rem;
     max-width: 900px;
-    margin: 0 auto;
-    flex-grow: 1;
+    padding: 2rem 3rem 4rem;
+    position: relative;
+    user-select: text;
   }
+
+  /* ==== SAYFA KONTEYNERLERİ ==== */
   .page {
-    display: none;
-    animation: fadeIn 0.5s ease forwards;
+    position: absolute;
+    top: 0; left: 50%;
+    width: 100%;
+    max-width: 900px;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform-origin: center center;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.9s cubic-bezier(0.55, 0, 0.1, 1),
+      transform 0.9s cubic-bezier(0.55, 0, 0.1, 1),
+      filter 0.7s ease;
+    background: rgba(0, 50, 40, 0.55);
+    border-radius: 40px;
+    box-shadow:
+      0 0 40px #00ffb1aa,
+      inset 0 0 30px #00ffb1cc;
+    padding: 3rem 3.5rem 4rem;
+    user-select: text;
   }
   .page.active {
-    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateZ(0) rotateY(0deg) scale(1);
+    filter: blur(0);
+    z-index: 10;
   }
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+  .page.leave-left {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(calc(-150%)) rotateY(30deg) scale(0.85);
+    filter: blur(4px);
+    z-index: 1;
   }
-  h1 {
-    font-weight: 900;
-    font-size: 2.7rem;
-    text-align: center;
-    color: #1db954;
-    margin-bottom: 2rem;
-    text-shadow: 0 0 8px #1db954;
-    letter-spacing: 1.2px;
+  .page.leave-right {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(calc(150%)) rotateY(-30deg) scale(0.85);
+    filter: blur(4px);
+    z-index: 1;
   }
 
-  /* Filtre inputu ana sayfa */
+  /* ==== BAŞLIKLAR ==== */
+  h1, h2 {
+    font-weight: 900;
+    font-size: 3rem;
+    color: #00ffb1;
+    text-shadow:
+      0 0 15px #00ffb1,
+      0 0 45px #00ffb1;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    user-select: text;
+  }
+
+  /* ==== ARAMA ALANI ==== */
   #filter-input {
     width: 100%;
-    padding: 10px 14px;
-    margin-bottom: 1.5rem;
-    border-radius: 12px;
+    padding: 18px 24px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 40px;
     border: none;
-    font-size: 1rem;
-    box-shadow: inset 0 0 10px #121212;
-    background: #212121;
-    color: #ddd;
+    background: rgba(0, 255, 177, 0.15);
+    color: #b8fff4;
+    box-shadow:
+      inset 0 0 40px #00ffb1cc,
+      0 0 40px #00ffb1bb;
+    margin-bottom: 3rem;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    user-select: text;
+  }
+  #filter-input::placeholder {
+    color: #6affb7cc;
+    font-weight: 600;
+  }
+  #filter-input:focus {
+    outline: none;
+    background: rgba(0, 255, 177, 0.3);
+    box-shadow:
+      inset 0 0 60px #00ffb1ff,
+      0 0 80px #00ffb1ff;
   }
 
-  /* Şarkı listesi grid */
+  /* ==== ŞARKI KARTLARI ==== */
   #popular, #songs-list {
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-    gap: 1.7rem;
+    gap: 3rem;
   }
-
   .song-item {
-    background: #282828;
-    border-radius: 16px;
-    padding: 1rem 1.3rem;
+    background: linear-gradient(135deg, #004d2e, #007645);
+    border-radius: 36px;
+    padding: 1.8rem 2.5rem;
+    box-shadow:
+      0 0 30px #00ffb1bb,
+      inset 0 0 40px #00ffb1aa;
     display: flex;
-    gap: 1rem;
-    cursor: pointer;
     align-items: center;
-    transition: box-shadow 0.4s ease, transform 0.3s ease;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    gap: 2rem;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition:
+      box-shadow 0.6s ease,
+      transform 0.45s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
   .song-item:hover {
-    box-shadow: 0 0 25px #1db954;
-    transform: translateY(-5px);
+    transform: translateY(-15px) rotateX(8deg) rotateZ(4deg) scale(1.12);
+    box-shadow:
+      0 0 65px #00ffb1ee,
+      inset 0 0 55px #00ffb1dd;
   }
-
   .song-cover {
-    width: 70px;
-    height: 70px;
-    border-radius: 12px;
+    width: 90px;
+    height: 90px;
+    border-radius: 26px;
+    box-shadow:
+      0 0 45px #00ffb1cc;
     object-fit: cover;
     flex-shrink: 0;
-    box-shadow: 0 0 6px rgba(0,0,0,0.6);
+    transition: transform 0.7s ease;
+  }
+  .song-item:hover .song-cover {
+    transform: scale(1.15) rotate(5deg);
   }
   .song-info {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    color: #ddd;
+    gap: 10px;
+    user-select: text;
   }
   .song-name {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #1db954;
-    margin-bottom: 0.2rem;
+    font-weight: 900;
+    font-size: 1.45rem;
+    color: #00ffb1;
+    text-shadow:
+      0 0 22px #00ffb1;
+    letter-spacing: 1.2px;
     user-select: text;
-    text-shadow: 0 0 6px #1db954;
   }
   .song-link {
-    font-size: 0.9rem;
-    color: #999;
-    word-break: break-word;
+    font-size: 1rem;
+    color: #aaffd1cc;
+    overflow-wrap: break-word;
     user-select: text;
-    transition: color 0.3s ease;
+    transition: color 0.4s ease;
   }
   .song-link:hover {
-    color: #1db954;
+    color: #00ffb1;
     text-decoration: underline;
   }
-  .play-button {
-    background: #1db954;
+
+  /* ==== BUTONLAR ==== */
+  .play-button, .fav-button {
+    background: #00ffb1;
     border: none;
-    color: #121212;
-    font-size: 1.4rem;
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    color: #002214;
     cursor: pointer;
+    font-size: 1.55rem;
+    margin-left: 15px;
+    box-shadow:
+      0 0 30px #00ffb1cc,
+      inset 0 0 20px #00ffb199;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color 0.45s ease,
+      transform 0.45s ease,
+      box-shadow 0.45s ease;
     flex-shrink: 0;
-    box-shadow: 0 0 10px #1db954;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-  .play-button:hover {
-    background-color: #17a84b;
-    transform: scale(1.2);
-    box-shadow: 0 0 20px #17a84b;
+  .play-button:hover, .fav-button:hover {
+    background: #00e497;
+    transform: scale(1.35) rotate(-8deg);
+    box-shadow:
+      0 0 60px #00ffb1ff,
+      inset 0 0 30px #00ffb1ff;
+  }
+  .fav-button.remove {
+    background: #ff3d70;
+    color: #330019;
+    box-shadow:
+      0 0 35px #ff3d70cc,
+      inset 0 0 25px #ff3d70aa;
+  }
+  .fav-button.remove:hover {
+    background: #ff214a;
+    box-shadow:
+      0 0 50px #ff214acc,
+      inset 0 0 30px #ff214aaa;
   }
 
-  #toggle-add-form {
-    background: #1db954;
-    border: none;
-    color: #121212;
-    padding: 0.85rem 1.3rem;
-    border-radius: 30px;
-    cursor: pointer;
-    margin-bottom: 1.4rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 1.05rem;
-    box-shadow: 0 0 10px #1db954;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  /* ==== FAVORİLER BOŞ DURUM ==== */
+  #fav-list {
+    min-height: 140px;
+    color: #88ffbbcc;
+    font-style: italic;
+    text-align: center;
     user-select: none;
-    justify-content: center;
-  }
-  #toggle-add-form:hover {
-    background: #17a84b;
-    transform: scale(1.05);
+    padding: 2.5rem 1rem;
+    font-weight: 700;
+    font-size: 1.25rem;
   }
 
-  #add-form.hidden {
-    display: none;
-  }
+  /* ==== ŞARKI EKLEME FORMU ==== */
   #add-form {
-    background: #212121;
-    padding: 1.3rem 1.7rem;
-    border-radius: 16px;
-    margin-bottom: 2rem;
-    box-shadow: 0 0 25px #121212 inset;
+    margin-bottom: 3.8rem;
     display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-    animation: fadeIn 0.3s ease;
+    gap: 24px;
+    flex-wrap: wrap;
+    background: rgba(0, 255, 165, 0.12);
+    border-radius: 48px;
+    padding: 2rem 3rem;
+    box-shadow:
+      inset 0 0 40px #00ffb166;
+    user-select: text;
+    transition: all 0.5s ease;
+  }
+  #add-form.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-40px);
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   #add-form input {
-    font-size: 1rem;
-    padding: 0.9rem 1.1rem;
-    border-radius: 14px;
+    flex: 1 1 280px;
+    padding: 18px 28px;
+    border-radius: 48px;
     border: none;
-    background: #121212;
-    color: #ddd;
-    box-shadow: inset 0 0 10px #000;
-    transition: box-shadow 0.3s ease;
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: rgba(0, 255, 165, 0.2);
+    color: #b8fff4;
+    box-shadow:
+      inset 0 0 45px #00ffb1cc;
+    transition: box-shadow 0.4s ease, background-color 0.4s ease;
+  }
+  #add-form input::placeholder {
+    color: #6affb7cc;
+    font-weight: 600;
   }
   #add-form input:focus {
     outline: none;
-    box-shadow: 0 0 12px #1db954;
+    background: rgba(0, 255, 165, 0.4);
+    box-shadow:
+      inset 0 0 60px #00ffb1ff,
+      0 0 60px #00ffb1ff;
   }
   #add-form button[type="submit"] {
-    background: #1db954;
+    background: linear-gradient(135deg, #00ffb1, #00dda0);
     border: none;
-    padding: 1rem;
+    color: #002214;
     font-weight: 900;
-    color: #121212;
-    border-radius: 18px;
+    font-size: 1.5rem;
+    padding: 18px 40px;
+    border-radius: 60px;
     cursor: pointer;
-    font-size: 1.1rem;
-    box-shadow: 0 0 15px #1db954;
-    transition: background-color 0.3s ease, transform 0.25s ease;
+    box-shadow:
+      0 0 60px #00ffb1bb;
+    transition:
+      background 0.45s ease,
+      box-shadow 0.45s ease,
+      transform 0.4s ease;
   }
   #add-form button[type="submit"]:hover {
-    background: #17a84b;
-    transform: scale(1.05);
+    background: linear-gradient(135deg, #00ffcf, #00ccac);
+    box-shadow:
+      0 0 90px #00ffb1ff;
+    transform: scale(1.15) rotate(-3deg);
   }
 
-  /* Player sayfası */
+  /* ==== PLAYER ==== */
   #player {
+    max-width: 520px;
+    margin: 0 auto 4rem;
     text-align: center;
+    background: linear-gradient(145deg, #002b21, #004733);
+    border-radius: 60px;
+    padding: 3rem 3.5rem 4rem;
+    box-shadow:
+      0 0 80px #00ffb1cc;
+    user-select: none;
+    perspective: 1100px;
   }
   #player-cover {
-    width: 160px;
-    height: 160px;
-    border-radius: 24px;
+    width: 200px;
+    height: 200px;
+    border-radius: 48px;
     object-fit: cover;
-    box-shadow: 0 0 35px #1db954;
-    margin-bottom: 1.4rem;
+    box-shadow:
+      0 0 60px #00ffb1aa,
+      0 0 100px #00ffb1cc;
+    margin-bottom: 2.6rem;
+    transition: transform 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+  }
+  #player-cover.playing {
+    animation: albumSpin 14s linear infinite;
+  }
+  @keyframes albumSpin {
+    0% { transform: rotateY(0deg) rotateZ(0deg); }
+    100% { transform: rotateY(360deg) rotateZ(20deg); }
   }
   #player-title {
-    font-size: 1.8rem;
-    margin-bottom: 1.6rem;
-    color: #1db954;
-    text-shadow: 0 0 12px #1db954;
+    font-size: 3rem;
     font-weight: 900;
+    margin-bottom: 3.8rem;
+    color: #00ffb1;
+    text-shadow:
+      0 0 25px #00ffb1,
+      0 0 65px #00ffb1;
+    user-select: text;
   }
   #player-iframe {
     width: 100%;
-    max-width: 480px;
-    height: 270px;
+    height: 300px;
+    border-radius: 40px;
     border: none;
-    border-radius: 16px;
-    box-shadow: 0 0 35px #1db954;
-    margin-bottom: 1.8rem;
-    background: #000;
+    box-shadow:
+      0 0 70px #00ffb1cc;
+    background: #001a12;
+    filter: drop-shadow(0 0 10px #00ffb1);
   }
   #play-pause {
-    font-size: 2.8rem;
-    background: #1db954;
+    margin-top: 3rem;
+    background: linear-gradient(135deg, #00ffb1, #00cc9e);
     border: none;
+    color: #001b12;
+    font-size: 3.2rem;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
-    width: 64px;
-    height: 64px;
     cursor: pointer;
-    color: #121212;
-    box-shadow: 0 0 25px #1db954;
-    transition: background-color 0.3s ease, transform 0.25s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow:
+      0 0 90px #00ffb1,
+      inset 0 -5px 15px #00cc9e;
+    transition:
+      background-color 0.4s ease,
+      transform 0.4s ease,
+      box-shadow 0.4s ease;
   }
   #play-pause:hover {
-    background: #17a84b;
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #00ffa2, #00b587);
+    transform: scale(1.22) rotate(-10deg);
+    box-shadow:
+      0 0 130px #00ffb1,
+      inset 0 -6px 18px #00b587;
+  }
+  #play-pause i {
+    filter: drop-shadow(0 0 8px #00ffb1);
   }
 
-  /* Responsive */
-  @media (min-width: 768px) {
+  /* ==== RESPONSIVE ==== */
+  @media (max-width: 800px) {
+    nav.menu.top {
+      padding: 1rem 0;
+      border-radius: 0 0 30px 30px;
+    }
     main {
-      padding: 6rem 3rem 7rem;
+      margin: 5rem 1.2rem 6rem;
+      padding: 1.8rem 1.6rem 3rem;
     }
-    .menu.top {
-      display: flex;
+    #player {
+      max-width: 95vw;
+      padding: 2rem 2rem 3rem;
+      border-radius: 36px;
     }
-    .menu.bottom {
-      display: none;
+    #player-cover {
+      width: 140px;
+      height: 140px;
+      border-radius: 30px;
     }
-  }
-  @media (max-width: 767px) {
-    main {
-      padding: 2rem 1.3rem 5rem;
+    #player-title {
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
     }
-    .menu.top {
-      display: none;
+    #player-iframe {
+      height: 220px;
+      border-radius: 24px;
     }
-    .menu.bottom {
-      display: flex;
+    #play-pause {
+      width: 68px;
+      height: 68px;
+      font-size: 2.4rem;
+    }
+    #filter-input {
+      font-size: 1.1rem;
+      padding: 14px 20px;
+    }
+    .song-item {
+      gap: 1.2rem;
+      padding: 1.1rem 1.5rem;
+      border-radius: 26px;
+    }
+    .song-cover {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+    }
+    .song-name {
+      font-size: 1.1rem;
     }
   }
 </style>
 </head>
 <body>
 
-<!-- Menü PC üst çubuk -->
-<nav class="menu top" role="navigation" aria-label="Ana Menü">
-  <button id="btn-home" title="Ana Sayfa"><i class="fas fa-house"></i></button>
-  <button id="btn-list" title="Şarkılar Listesi"><i class="fas fa-list"></i></button>
-  <button id="btn-add" title="Şarkı Ekle"><i class="fas fa-plus-circle"></i></button>
-  <button id="btn-fav" title="Favoriler"><i class="fas fa-star"></i></button>
-</nav>
-<!-- Menü Mobil alt çubuk -->
-<nav class="menu bottom" role="navigation" aria-label="Ana Menü Mobil">
-  <button id="btn-home-m" title="Ana Sayfa"><i class="fas fa-house"></i></button>
-  <button id="btn-list-m" title="Şarkılar Listesi"><i class="fas fa-list"></i></button>
-  <button id="btn-add-m" title="Şarkı Ekle"><i class="fas fa-plus-circle"></i></button>
-  <button id="btn-fav-m" title="Favoriler"><i class="fas fa-star"></i></button>
+<nav class="menu top" aria-label="Sayfa menüsü">
+  <button class="active" title="Popüler" id="btn-popular" aria-pressed="true" aria-controls="popular" aria-haspopup="true" aria-expanded="true"><i class="fas fa-fire"></i></button>
+  <button title="Şarkılar" id="btn-songs" aria-pressed="false" aria-controls="songs-list" aria-haspopup="true" aria-expanded="false"><i class="fas fa-music"></i></button>
+  <button title="Favoriler" id="btn-fav" aria-pressed="false" aria-controls="fav-list" aria-haspopup="true" aria-expanded="false"><i class="fas fa-heart"></i></button>
+  <button title="Ekle" id="btn-add" aria-pressed="false" aria-controls="add-form" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus-circle"></i></button>
 </nav>
 
-<main>
-  <!-- Ana Sayfa -->
-  <section id="home" class="page active" role="main" aria-label="Ana Sayfa">
-    <h1>En Çok Dinlenenler</h1>
-
-    <input
-      type="search"
-      id="filter-input"
-      placeholder="Şarkı adına göre filtrele..."
-      aria-label="Şarkı adına göre filtrele"
-      autocomplete="off"
-    />
-
-    <div id="popular" aria-live="polite"></div>
+<main role="main">
+  <section id="popular" class="page active" tabindex="0" aria-label="Popüler Şarkılar">
+    <h1>Popüler Şarkılar</h1>
+    <div id="popular-list" aria-live="polite" aria-relevant="additions removals"></div>
   </section>
 
-  <!-- Şarkılar Listesi -->
-  <section id="list" class="page" role="main" aria-label="Şarkılar Listesi">
-    <button id="toggle-add-form" aria-expanded="false" aria-controls="add-form" title="Yeni Şarkı Ekle">
-      <i class="fas fa-plus-circle"></i> Şarkı Ekle
-    </button>
+  <section id="songs-list" class="page" tabindex="0" aria-label="Şarkılar Listesi" hidden>
+    <h1>Şarkılar</h1>
+    <input type="text" id="filter-input" placeholder="Şarkı adı veya link ile ara..." aria-label="Şarkı arama" />
+    <div id="songs-container"></div>
+  </section>
 
-    <form id="add-form" class="hidden" aria-hidden="true" aria-label="Şarkı Ekleme Formu">
-      <input id="song-name" name="song-name" type="text" placeholder="Şarkı Adı" required autocomplete="off" />
-      <input id="song-link" name="song-link" type="url" placeholder="Spotify/YouTube/SoundCloud Linki" required autocomplete="off" />
-      <input id="song-cover" name="song-cover" type="url" placeholder="Albüm Kapağı URL" autocomplete="off" />
+  <section id="fav-list" class="page" tabindex="0" aria-label="Favori Şarkılar" hidden>
+    <h1>Favoriler</h1>
+    <div id="fav-container">Henüz favori şarkı yok.</div>
+  </section>
+
+  <section id="add-form" class="page" tabindex="0" aria-label="Şarkı Ekleme Formu" hidden>
+    <h1>Şarkı Ekle</h1>
+    <form id="form-add-song" aria-live="assertive">
+      <input type="text" id="input-name" placeholder="Şarkı Adı" required aria-required="true" />
+      <input type="url" id="input-link" placeholder="YouTube Linki" required aria-required="true" />
       <button type="submit" aria-label="Şarkıyı Ekle">Ekle</button>
     </form>
-
-    <div id="songs-list" aria-live="polite"></div>
   </section>
 
-  <!-- Favoriler -->
-  <section id="favorites" class="page" role="main" aria-label="Favori Şarkılar">
-    <h1>Favori Şarkılarım</h1>
-    <div id="fav-list" aria-live="polite" style="min-height:100px; color:#bbb; text-align:center;">
-      Favori listeniz boş.
-    </div>
-  </section>
-
-  <!-- Player -->
-  <section id="player" class="page" role="main" aria-label="Çalan Şarkı">
-    <img id="player-cover" src="https://via.placeholder.com/160?text=..." alt="Albüm Kapağı" />
-    <h2 id="player-title" aria-live="polite" aria-atomic="true">Şarkı Adı</h2>
-    <iframe
-      id="player-iframe"
-      src=""
-      allow="autoplay"
-      allowfullscreen
-      sandbox="allow-scripts allow-same-origin"
-      title="Müzik çalar"
-      ></iframe>
-    <button id="play-pause" title="Oynat / Duraklat" aria-label="Oynat veya duraklat">
-      <i class="fas fa-play"></i>
-    </button>
+  <section id="player" aria-label="Müzik oynatıcı">
+    <img id="player-cover" src="" alt="Albüm Kapağı" />
+    <h2 id="player-title" aria-live="polite">Henüz şarkı seçilmedi</h2>
+    <iframe id="player-iframe" src="" title="Müzik oynatıcı" allow="autoplay" allowfullscreen></iframe>
+    <button id="play-pause" aria-label="Oynat/Duraklat"><i class="fas fa-play"></i></button>
   </section>
 </main>
 
 <script>
-  // ======= Elementler =======
+  // Sayfa butonları, geçiş animasyonu & ARIA uyumluluğu
+  const buttons = {
+    popular: document.getElementById('btn-popular'),
+    songs: document.getElementById('btn-songs'),
+    fav: document.getElementById('btn-fav'),
+    add: document.getElementById('btn-add')
+  };
   const pages = {
-    home: document.getElementById('home'),
-    list: document.getElementById('list'),
-    player: document.getElementById('player'),
-    favorites: document.getElementById('favorites')
+    popular: document.getElementById('popular'),
+    songs: document.getElementById('songs-list'),
+    fav: document.getElementById('fav-list'),
+    add: document.getElementById('add-form')
   };
-  const navButtons = {
-    home: [document.getElementById('btn-home'), document.getElementById('btn-home-m')],
-    list: [document.getElementById('btn-list'), document.getElementById('btn-list-m')],
-    add: [document.getElementById('btn-add'), document.getElementById('btn-add-m')],
-    fav: [document.getElementById('btn-fav'), document.getElementById('btn-fav-m')],
-  };
-  const toggleAddBtn = document.getElementById('toggle-add-form');
-  const addForm = document.getElementById('add-form');
-  const songsList = document.getElementById('songs-list');
-  const popularDiv = document.getElementById('popular');
-  const filterInput = document.getElementById('filter-input');
-  const favList = document.getElementById('fav-list');
+
+  let activePage = 'popular';
+
+  function switchPage(target) {
+    if (target === activePage) return;
+    // Animasyon için sınıf değişiklikleri
+    const oldPage = pages[activePage];
+    const newPage = pages[target];
+
+    // Yeni sayfayı görünür yap, eski sayfaya çıkış animasyonu ver
+    newPage.hidden = false;
+    newPage.classList.add('active');
+    newPage.classList.remove('leave-left','leave-right');
+
+    oldPage.classList.remove('active');
+    // Eski sayfa hangi yöne kayacak
+    if(Object.keys(pages).indexOf(target) > Object.keys(pages).indexOf(activePage)){
+      oldPage.classList.add('leave-left');
+    } else {
+      oldPage.classList.add('leave-right');
+    }
+
+    // Buton aktif durumunu güncelle
+    buttons[activePage].classList.remove('active');
+    buttons[activePage].setAttribute('aria-pressed','false');
+    buttons[target].classList.add('active');
+    buttons[target].setAttribute('aria-pressed','true');
+
+    activePage = target;
+
+    // Eski sayfa sonunda gizlenir
+    setTimeout(() => {
+      for(const key in pages){
+        if(key !== activePage){
+          pages[key].hidden = true;
+          pages[key].classList.remove('leave-left','leave-right');
+        }
+      }
+    }, 900);
+  }
+
+  for(const key in buttons){
+    buttons[key].addEventListener('click', () => switchPage(key));
+  }
+
+  // Şarkı verileri (örnek)
+  const songs = [
+    {
+      name: "Enerjik Beat",
+      link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      cover: "https://i.imgur.com/VxN7wPj.jpg"
+    },
+    {
+      name: "Gece Yürüyüşü",
+      link: "https://www.youtube.com/embed/3JZ_D3ELwOQ",
+      cover: "https://i.imgur.com/6kTUL0t.jpg"
+    },
+    {
+      name: "Sabah Melodisi",
+      link: "https://www.youtube.com/embed/l482T0yNkeo",
+      cover: "https://i.imgur.com/ZILucoy.jpg"
+    }
+  ];
+
+  const popularList = document.getElementById('popular-list');
+  const songsContainer = document.getElementById('songs-container');
+  const favContainer = document.getElementById('fav-container');
   const playerCover = document.getElementById('player-cover');
   const playerTitle = document.getElementById('player-title');
-  const playPauseBtn = document.getElementById('play-pause');
   const playerIframe = document.getElementById('player-iframe');
-
-  // ======= Durum =======
-  let currentPage = 'home';
-  let currentSong = null;
+  const playPauseBtn = document.getElementById('play-pause');
   let isPlaying = false;
-  let allSongs = [];
-  let popularSongs = [];
-  let favorites = JSON.parse(localStorage.getItem('favorites')||'[]');
 
-  // ======= Fonksiyonlar =======
-  function escapeHtml(text) {
-    return text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
+  // Favoriler listesi localstorage ile saklanacak
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-  // Sayfa geçişi
-  function switchPage(page) {
-    currentPage = page;
-    Object.values(pages).forEach(p => p.classList.remove('active'));
-    pages[page].classList.add('active');
+  // Liste oluşturma fonksiyonu
+  function createSongElement(song, index, isFavList = false) {
+    const div = document.createElement('div');
+    div.className = 'song-item';
+    div.tabIndex = 0;
+    div.setAttribute('role', 'button');
+    div.setAttribute('aria-label', `${song.name} şarkısını oynat`);
+    div.dataset.index = index;
 
-    Object.values(navButtons).forEach(buttons => buttons.forEach(btn => btn.classList.remove('active')));
-    if(navButtons[page]) navButtons[page].forEach(btn => btn.classList.add('active'));
-
-    if(page !== 'list'){
-      addForm.classList.add('hidden');
-      toggleAddBtn.setAttribute('aria-expanded', 'false');
-    }
-    if(page === 'favorites') renderFavorites();
-  }
-
-  // Menü butonları event
-  Object.values(navButtons).forEach(buttons => {
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if(btn.id.includes('home')) switchPage('home');
-        else if(btn.id.includes('list')) switchPage('list');
-        else if(btn.id.includes('add')) {
-          switchPage('list');
-          addForm.classList.remove('hidden');
-          toggleAddBtn.setAttribute('aria-expanded', 'true');
-        }
-        else if(btn.id.includes('fav')) switchPage('favorites');
-      });
-    });
-  });
-
-  // Şarkı ekleme form toggle
-  toggleAddBtn.addEventListener('click', () => {
-    if(addForm.classList.contains('hidden')){
-      addForm.classList.remove('hidden');
-      toggleAddBtn.setAttribute('aria-expanded', 'true');
-    } else {
-      addForm.classList.add('hidden');
-      toggleAddBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
-
-  // Link doğrulama
-  function validateLink(url) {
-    try {
-      const u = new URL(url);
-      const allowed = ['open.spotify.com', 'music.youtube.com', 'youtube.com', 'youtu.be', 'soundcloud.com'];
-      return allowed.some(domain => u.hostname.includes(domain));
-    } catch {
-      return false;
-    }
-  }
-
-  // Şarkı ekleme API çağrısı
-  addForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const name = document.getElementById('song-name').value.trim();
-    const link = document.getElementById('song-link').value.trim();
-    const cover = document.getElementById('song-cover').value.trim();
-
-    if(!validateLink(link)){
-      alert('Sadece Spotify, YouTube, SoundCloud linkleri kabul edilir.');
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/songs', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name, file: link, cover}),
-      });
-      if(!res.ok) throw new Error('Sunucu hatası');
-      addForm.reset();
-      addForm.classList.add('hidden');
-      toggleAddBtn.setAttribute('aria-expanded', 'false');
-      await loadSongs();
-      switchPage('list');
-    } catch(e){
-      alert('Hata oluştu, tekrar deneyin.');
-      console.error(e);
-    }
-  });
-
-  // Şarkıları yükle
-  async function loadSongs(){
-    try {
-      const res = await fetch('/api/songs');
-      if(!res.ok) throw new Error('API hatası');
-      const songs = await res.json();
-
-      allSongs = songs;
-      popularSongs = [...songs].sort((a,b) => (b.count||0)-(a.count||0)).slice(0,5);
-
-      renderPopular(popularSongs);
-      renderSongsList(allSongs);
-    } catch(e){
-      popularDiv.innerHTML = '<p>Şarkılar yüklenirken hata oluştu.</p>';
-      songsList.innerHTML = '<p>Şarkılar yüklenirken hata oluştu.</p>';
-      console.error(e);
-    }
-  }
-
-  // Popüler şarkıları renderla
-  function renderPopular(songs){
-    if(!songs.length){
-      popularDiv.innerHTML = '<p>Henüz şarkı yok.</p>';
-      return;
-    }
-    popularDiv.innerHTML = songs.map(s => `
-      <div class="song-item" tabindex="0" role="button" aria-label="Şarkı: ${escapeHtml(s.name)}" data-id="${s.id}">
-        <img src="${s.cover || 'https://via.placeholder.com/70?text=?'}" alt="Albüm kapağı" class="song-cover" />
-        <div class="song-info">
-          <div class="song-name">${escapeHtml(s.name)}</div>
-          <a href="${s.file}" target="_blank" class="song-link">${escapeHtml(s.file)}</a>
-        </div>
-        <button class="play-button" title="Oynat" aria-label="Şarkıyı oynat"><i class="fas fa-play"></i></button>
-        <button class="fav-button" title="Favorilere Ekle" aria-label="Favorilere Ekle"><i class="fas fa-star"></i></button>
+    div.innerHTML = `
+      <img class="song-cover" src="${song.cover}" alt="${song.name} albüm kapağı" />
+      <div class="song-info">
+        <div class="song-name">${song.name}</div>
+        <a class="song-link" href="${song.link.replace('/embed','/watch?v=')}" target="_blank" rel="noopener noreferrer" tabindex="-1">${song.link.replace('/embed','/watch?v=')}</a>
       </div>
-    `).join('');
+      <button class="play-button" aria-label="Oynat ${song.name}"><i class="fas fa-play"></i></button>
+      <button class="fav-button ${isFavList ? 'remove' : ''}" aria-label="${isFavList ? 'Favorilerden çıkar' : 'Favorilere ekle'} ${song.name}">
+        <i class="fas fa-heart"></i>
+      </button>
+    `;
 
-    attachSongEvents(popularDiv, songs);
-  }
-
-  // Şarkı listesi renderla
-  function renderSongsList(songs){
-    if(!songs.length){
-      songsList.innerHTML = '<p>Henüz şarkı yok.</p>';
-      return;
-    }
-    songsList.innerHTML = songs.map(s => `
-      <div class="song-item" tabindex="0" role="button" aria-label="Şarkı: ${escapeHtml(s.name)}" data-id="${s.id}">
-        <img src="${s.cover || 'https://via.placeholder.com/70?text=?'}" alt="Albüm kapağı" class="song-cover" />
-        <div class="song-info">
-          <div class="song-name">${escapeHtml(s.name)}</div>
-          <a href="${s.file}" target="_blank" class="song-link">${escapeHtml(s.file)}</a>
-        </div>
-        <button class="play-button" title="Oynat" aria-label="Şarkıyı oynat"><i class="fas fa-play"></i></button>
-        <button class="fav-button" title="Favorilere Ekle" aria-label="Favorilere Ekle"><i class="fas fa-star"></i></button>
-      </div>
-    `).join('');
-
-    attachSongEvents(songsList, songs);
-  }
-
-  // Favorileri renderla
-  function renderFavorites(){
-    if(!favorites.length){
-      favList.innerHTML = 'Favori listeniz boş.';
-      return;
-    }
-    favList.innerHTML = favorites.map(s => `
-      <div class="song-item" tabindex="0" role="button" aria-label="Favori Şarkı: ${escapeHtml(s.name)}" data-id="${s.id}">
-        <img src="${s.cover || 'https://via.placeholder.com/70?text=?'}" alt="Albüm kapağı" class="song-cover" />
-        <div class="song-info">
-          <div class="song-name">${escapeHtml(s.name)}</div>
-          <a href="${s.file}" target="_blank" class="song-link">${escapeHtml(s.file)}</a>
-        </div>
-        <button class="play-button" title="Oynat" aria-label="Şarkıyı oynat"><i class="fas fa-play"></i></button>
-        <button class="fav-button remove" title="Favorilerden Kaldır" aria-label="Favorilerden Kaldır"><i class="fas fa-star"></i></button>
-      </div>
-    `).join('');
-
-    attachSongEvents(favList, favorites, true);
-  }
-
-  // Olayları ata: play + fav ekle/kaldır
-  function attachSongEvents(container, songsArray, isFavSection = false){
-    container.querySelectorAll('.play-button').forEach(btn => {
-      btn.onclick = e => {
-        e.stopPropagation();
-        const id = btn.closest('.song-item').dataset.id;
-        playSong(id, songsArray);
-        switchPage('player');
-      };
+    // Oynat butonu
+    div.querySelector('.play-button').addEventListener('click', e => {
+      e.stopPropagation();
+      playSong(song);
     });
-    container.querySelectorAll('.song-item').forEach(item => {
-      item.onclick = () => {
-        const id = item.dataset.id;
-        playSong(id, songsArray);
-        switchPage('player');
-      };
+    // Favori butonu
+    div.querySelector('.fav-button').addEventListener('click', e => {
+      e.stopPropagation();
+      toggleFavorite(song);
+      renderFavorites();
+      renderSongs();
     });
-    container.querySelectorAll('.fav-button').forEach(btn => {
-      btn.onclick = e => {
-        e.stopPropagation();
-        const id = btn.closest('.song-item').dataset.id;
-        if(isFavSection){
-          removeFromFavorites(id);
-        } else {
-          addToFavorites(id, songsArray);
-        }
-      };
+    // Kart tıklama ile oynat
+    div.addEventListener('click', () => playSong(song));
+    div.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        playSong(song);
+      }
+    });
+
+    return div;
+  }
+
+  // Popüler şarkılar sayfasını oluştur
+  function renderPopular() {
+    popularList.innerHTML = '';
+    songs.forEach((song, i) => {
+      popularList.appendChild(createSongElement(song, i));
     });
   }
 
-  // Favorilere ekle
-  function addToFavorites(id, songsArray){
-    const song = songsArray.find(s => s.id === id);
-    if(!song) return;
-    if(favorites.some(f => f.id === id)){
-      alert('Zaten favorilerde.');
+  // Tüm şarkılar sayfası
+  function renderSongs(filter = '') {
+    songsContainer.innerHTML = '';
+    const filtered = songs.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.link.toLowerCase().includes(filter.toLowerCase()));
+    if(filtered.length === 0){
+      songsContainer.innerHTML = `<p style="text-align:center; font-weight:700; margin-top:30px;">Arama kriterlerinize uygun şarkı bulunamadı.</p>`;
       return;
     }
-    favorites.push(song);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    alert('Favorilere eklendi.');
+    filtered.forEach((song, i) => {
+      songsContainer.appendChild(createSongElement(song, i));
+    });
   }
 
-  // Favorilerden çıkar
-  function removeFromFavorites(id){
-    favorites = favorites.filter(f => f.id !== id);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    renderFavorites();
+  // Favoriler sayfası
+  function renderFavorites() {
+    favContainer.innerHTML = '';
+    if(favorites.length === 0) {
+      favContainer.textContent = 'Henüz favori şarkı yok.';
+      return;
+    }
+    favorites.forEach((favSong, i) => {
+      favContainer.appendChild(createSongElement(favSong, i, true));
+    });
   }
 
-  // Şarkı çalma
-  function playSong(id, songsArray){
-    const song = songsArray.find(s => s.id === id);
-    if(!song) return;
-    currentSong = song;
-    playerCover.src = song.cover || 'https://via.placeholder.com/160?text=...';
+  // Şarkıyı oynat
+  function playSong(song) {
+    playerCover.src = song.cover;
     playerTitle.textContent = song.name;
-
-    // Embed URL oluştur
-    const embedUrl = getEmbedUrl(song.file);
-    if(!embedUrl){
-      alert('Geçerli bir Spotify, YouTube veya SoundCloud linki değil.');
-      return;
-    }
-
-    playerIframe.src = embedUrl;
+    playerIframe.src = song.link + '?autoplay=1&rel=0&modestbranding=1';
+    playerCover.classList.add('playing');
     isPlaying = true;
-    updatePlayPauseIcon();
+    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
   }
 
-  // Embed URL dönüştürme
-  function getEmbedUrl(url){
-    try {
-      const u = new URL(url);
-
-      // Spotify
-      if(u.hostname.includes('spotify.com')){
-        // Open.spotify.com URL'sini embed linke çevir
-        const path = u.pathname;
-        if(path.startsWith('/track/') || path.startsWith('/album/') || path.startsWith('/playlist/')){
-          return `https://open.spotify.com/embed${path}`;
-        }
-      }
-      // YouTube
-      else if(u.hostname.includes('youtube.com') || u.hostname.includes('youtu.be')){
-        let videoId = '';
-        if(u.hostname === 'youtu.be'){
-          videoId = u.pathname.slice(1);
-        } else {
-          videoId = u.searchParams.get('v') || '';
-        }
-        if(videoId) return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-      }
-      // SoundCloud
-      else if(u.hostname.includes('soundcloud.com')){
-        return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true`;
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  }
-
-  // Play/pause toggle
+  // Oynat/Duraklat butonu
   playPauseBtn.addEventListener('click', () => {
-    // iframe kontrolü sınırlı, bu yüzden sayfayı reload etmek veya mute/unmute gerekebilir.
-    if(isPlaying){
-      playerIframe.contentWindow.postMessage('{"method":"pause"}', '*');
+    if(!playerIframe.src) return;
+    if(isPlaying) {
+      // iframe autoplay durdurmak zor, ama video pause edilebiliyor postMessage ile,
+      // burada basitçe sayfayı sıfırlıyoruz
+      playerIframe.src = playerIframe.src.replace('&autoplay=1', '');
       isPlaying = false;
+      playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      playerCover.classList.remove('playing');
     } else {
-      playerIframe.contentWindow.postMessage('{"method":"play"}', '*');
+      playerIframe.src += '&autoplay=1';
       isPlaying = true;
+      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      playerCover.classList.add('playing');
     }
-    updatePlayPauseIcon();
   });
 
-  // Play/pause buton güncelle
-  function updatePlayPauseIcon(){
-    if(isPlaying){
-      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  // Favorilere ekle/çıkar
+  function toggleFavorite(song) {
+    const exists = favorites.find(f => f.link === song.link);
+    if(exists) {
+      favorites = favorites.filter(f => f.link !== song.link);
     } else {
-      playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      favorites.push(song);
     }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }
 
-  // Klavye space = oynat/durdur (player sayfasındayken)
-  window.addEventListener('keydown', e => {
-    if(currentPage !== 'player') return;
-    if(e.code === 'Space'){
-      e.preventDefault();
-      playPauseBtn.click();
-    }
+  // Arama fonksiyonu
+  const filterInput = document.getElementById('filter-input');
+  filterInput.addEventListener('input', e => {
+    renderSongs(e.target.value);
   });
 
-  // Ana sayfa filtreleme
-  filterInput.addEventListener('input', () => {
-    const val = filterInput.value.trim().toLowerCase();
-    if(!val){
-      renderPopular(popularSongs);
-      return;
-    }
-    const filtered = popularSongs.filter(s => s.name.toLowerCase().includes(val));
-    renderPopular(filtered);
+  // Şarkı ekleme formu
+  const formAdd = document.getElementById('form-add-song');
+  formAdd.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('input-name').value.trim();
+    const link = document.getElementById('input-link').value.trim();
+
+    if(!name || !link) return;
+
+    const newSong = {
+      name,
+      link: link.includes('youtube.com/embed') ? link : link.replace('watch?v=', 'embed/'),
+      cover: 'https://cdn-icons-png.flaticon.com/512/727/727245.png'
+    };
+    songs.push(newSong);
+    renderPopular();
+    renderSongs();
+    document.getElementById('input-name').value = '';
+    document.getElementById('input-link').value = '';
+    switchPage('popular');
   });
 
-  // Sayfa yüklendiğinde
-  window.onload = async () => {
-    await loadSongs();
-  };
+  // İlk yüklemede içerikleri hazırla
+  renderPopular();
+  renderSongs();
+  renderFavorites();
+
 </script>
 
 </body>
